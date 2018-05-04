@@ -100,7 +100,7 @@ class ViewController: UIViewController {
     if let num = Double(sender.text!) {
       countDownFrom = num
     } else {
-      countDownFrom = 5
+      countDownFrom = 4
     }
   }
   

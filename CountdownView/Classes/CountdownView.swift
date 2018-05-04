@@ -28,7 +28,7 @@ public class CountdownView: UIView {
   
   fileprivate var countdownFrom: Double! {
     didSet {
-      counterLabel.text = "\(Int(countdownFrom!))"
+      counterLabel.text = "\(Int(countdownFrom! + 1))"
     }
   }
   
@@ -324,7 +324,7 @@ public class CountdownView: UIView {
       }
       
       CountdownView.shared.timedTask = DispatchWorkItem {
-        hide(animation: autoHideAnimation, options: (duration: 0.5, delay: 0.2)) {
+        hide(animation: autoHideAnimation, options: (duration: 1, delay: 0.2)) {
           if completion != nil {
             completion!()
           }
