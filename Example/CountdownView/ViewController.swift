@@ -59,7 +59,7 @@ class ViewController: UIViewController {
   
   // MARK: Actions
   
-  func didSwitchSpinSwitch(_ sender: UISwitch) {
+  @objc func didSwitchSpinSwitch(_ sender: UISwitch) {
     if sender.isOn {
       spin = true
     } else {
@@ -67,7 +67,7 @@ class ViewController: UIViewController {
     }
   }
   
-  func didSwitchAutohideSwitch(_ sender: UISwitch) {
+  @objc func didSwitchAutohideSwitch(_ sender: UISwitch) {
     if sender.isOn {
       autohide = true
       
@@ -96,7 +96,7 @@ class ViewController: UIViewController {
     }
   }
   
-  func textFieldDidChange(_ sender: UITextField) {
+  @objc func textFieldDidChange(_ sender: UITextField) {
     if let num = Double(sender.text!) {
       countDownFrom = num
     } else {

@@ -1,16 +1,16 @@
 PODS:
-  - CountdownView (0.1.0)
+  - CountdownView (0.1.2)
 
 DEPENDENCIES:
   - CountdownView (from `../`)
 
 EXTERNAL SOURCES:
   CountdownView:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
-  CountdownView: 51bb022ad39ffc87dd9ec46623e773443862ae08
+  CountdownView: 6b3b8b25685821aa7ed454c352decd24e024b104
 
 PODFILE CHECKSUM: fba01a5ea5874ce87cde224d3ca623da2aa635f7
 
-COCOAPODS: 1.2.0.beta.3
+COCOAPODS: 1.4.0
