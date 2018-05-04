@@ -133,10 +133,16 @@ class ViewController: UIViewController {
      
     */
     
-    CountdownView.shared.dismissStyle = .byButton
+    CountdownView.shared.dismissStyle = .none
+    
+//    CountdownView.shared.closeButtonTitleLabelFont = UIFont.systemFont(ofSize: 36)
+//    CountdownView.shared.closeButtonTitleLabelText = "Cancel"
+//    CountdownView.shared.counterViewBackgroundColor = .black
+//    CountdownView.shared.counterLabelTextColor = .white
+//    CountdownView.shared.counterSubLabelTextColor = .white
     
     CountdownView.show(countdownFrom: countDownFrom, spin: spin, animation: appearingAnimation, autoHide: autohide,
-                       completion: nil)
+                       completion: exampleCompletion, onCancel: exampleCancel)
     
     if !autohide {
       delay(countDownFrom, closure: {
@@ -149,6 +155,10 @@ class ViewController: UIViewController {
   func exampleCompletion() {
     print("Hey there! I am the completion thingy you are looking for.")
   }
+    
+    func exampleCancel() {
+        print("Cancelled")
+    }
   
 }
 

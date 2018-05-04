@@ -72,6 +72,14 @@ public class CountdownView: UIView {
   public var closeButtonLeftAnchorConstant: CGFloat = 10
   public var closeButtonImage: UIImage? = nil
   public var closeButtonTintColor: UIColor = .white
+    
+  public var cancelButtonTitleLabelText = "Cancel"
+  public var cancelButtonTitleLabelFont = UIFont.systemFont(ofSize: 36)
+  public var cancelButtonTitleLabelColor = UIColor.white
+  public var cancelButtonTopAnchorConstant: CGFloat = 22
+  public var cancelButtonLeftAnchorConstant: CGFloat = 10
+  public var cancelButtonImage: UIImage? = nil
+  public var cancelButtonTintColor: UIColor = .white
   
   // MARK: Layout
   
@@ -85,12 +93,14 @@ public class CountdownView: UIView {
   private var counterLabel = UILabel()
   private var counterSubLabel = UILabel()
   private var closeButton = UIButton(type: .system)
+  private var cancelButton = UIButton(type: .system)
   
   private func setupViews() {
     
     addSubview(backgroundView)
     addSubview(contentView)
     addSubview(closeButton)
+    addSubview(cancelButton)
     
     backgroundView.alpha = 0
     backgroundView.backgroundColor = backgroundViewColor
@@ -156,6 +166,19 @@ public class CountdownView: UIView {
     closeButton.translatesAutoresizingMaskIntoConstraints = false
     closeButton.topAnchor.constraint(equalTo: self.topAnchor, constant: closeButtonTopAnchorConstant).isActive = true
     closeButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: closeButtonLeftAnchorConstant).isActive = true
+    
+
+    if let image = cancelButtonImage {
+        cancelButton.setImage(image, for: .normal)
+    }
+    cancelButton.tintColor = closeButtonTintColor
+    cancelButton.setTitle(cancelButtonTitleLabelText, for: .normal)
+    cancelButton.setTitleColor(cancelButtonTitleLabelColor, for: .normal)
+    cancelButton.titleLabel?.font = cancelButtonTitleLabelFont
+    cancelButton.titleLabel?.textAlignment = .center
+    cancelButton.translatesAutoresizingMaskIntoConstraints = false
+    cancelButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: self.frame.size.width / 2 - getStringWidth(text: cancelButtonTitleLabelText, font: cancelButtonTitleLabelFont) / 2).isActive = true
+    cancelButton.topAnchor.constraint(equalTo: self.topAnchor, constant: self.frame.size.height * 3 / 4).isActive = true
   }
   
   //
@@ -202,6 +225,7 @@ public class CountdownView: UIView {
     countdownView.spin(spin)
     countdownView.updateFrame()
     countdownView.contentView.transform = CGAffineTransform.identity
+    countdownView.cancelButton.addTarget(countdownView, action: #selector(countdownView.didTapCancelButton), for: .touchUpInside)
     
     switch countdownView.dismissStyle {
     case .none:
@@ -256,14 +280,22 @@ public class CountdownView: UIView {
   }
   
   fileprivate var currentCompletion: (()->())?
+    
+  fileprivate var cancelEventHandler: (()->())?
   
-  public class func show(countdownFrom: Double, spin: Bool, animation: Animation, autoHide: Bool, completion: (()->())?) {
+    public class func show(countdownFrom: Double, spin: Bool, animation: Animation, autoHide: Bool, completion: (()->())?, onCancel: (()->())?) {
     show(countdownFrom: countdownFrom, spin: spin, animation: animation)
     
     if completion != nil {
       CountdownView.shared.currentCompletion = completion!
     } else {
       CountdownView.shared.currentCompletion = nil
+    }
+        
+    if onCancel != nil {
+      CountdownView.shared.cancelEventHandler = onCancel!
+    } else {
+      CountdownView.shared.cancelEventHandler = nil
     }
     
     if autoHide {
@@ -390,7 +422,15 @@ public class CountdownView: UIView {
   }
   
   // MARK: Actions
-  
+    @objc fileprivate func didTapCancelButton() {
+        CountdownView.hide(animation: dismissStyleAnimation, options: (duration: 0.5, delay: 0), completion: nil)
+        CountdownView.shared.currentCompletion = nil
+        CountdownView.shared.timedTask.cancel()
+        if cancelEventHandler != nil {
+            cancelEventHandler!()
+        }
+    }
+    
   @objc fileprivate func didTapCloseButton() {
     CountdownView.hide(animation: dismissStyleAnimation, options: (duration: 0.5, delay: 0), completion: currentCompletion)
     CountdownView.shared.currentCompletion = nil
@@ -538,6 +578,11 @@ extension CountdownView {
     }
   }
   
+    func getStringWidth(text: String, font: UIFont) -> CGFloat{
+        let fontAttributes = [NSAttributedStringKey.font: font]
+        let size = (text as NSString).size(withAttributes: fontAttributes)
+        return size.width
+    }
 }
 
 // MARK: Dismiss style
@@ -547,5 +592,10 @@ extension CountdownView {
     case none
     case byButton
     case byTapOnOutside
+  }
+    
+  public enum ButtonPosition {
+    case topLeft
+    case bottomCenter
   }
 }
