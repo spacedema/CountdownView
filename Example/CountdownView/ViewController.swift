@@ -133,13 +133,8 @@ class ViewController: UIViewController {
      
     */
     
-    CountdownView.shared.dismissStyle = .none
-    
-//    CountdownView.shared.closeButtonTitleLabelFont = UIFont.systemFont(ofSize: 36)
-//    CountdownView.shared.closeButtonTitleLabelText = "Cancel"
-//    CountdownView.shared.counterViewBackgroundColor = .black
-//    CountdownView.shared.counterLabelTextColor = .white
-//    CountdownView.shared.counterSubLabelTextColor = .white
+    CountdownView.shared.dismissStyle = .byButton
+    CountdownView.shared.canCancel = false
     
     CountdownView.show(countdownFrom: countDownFrom, spin: spin, animation: appearingAnimation, autoHide: autohide,
                        completion: exampleCompletion, onCancel: exampleCancel)

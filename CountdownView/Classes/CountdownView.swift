@@ -36,6 +36,7 @@ public class CountdownView: UIView {
   
   public var dismissStyle: DismissStyle = .none
   public var dismissStyleAnimation: Animation = .fadeOut
+  public var canCancel: Bool = false
   
   public var frameSize = CGSize(width: 160.0, height: 160.0)
   public var framePosition = UIApplication.shared.keyWindow!.center
@@ -171,7 +172,7 @@ public class CountdownView: UIView {
     if let image = cancelButtonImage {
         cancelButton.setImage(image, for: .normal)
     }
-    cancelButton.tintColor = closeButtonTintColor
+    cancelButton.tintColor = cancelButtonTintColor
     cancelButton.setTitle(cancelButtonTitleLabelText, for: .normal)
     cancelButton.setTitleColor(cancelButtonTitleLabelColor, for: .normal)
     cancelButton.titleLabel?.font = cancelButtonTitleLabelFont
@@ -242,6 +243,10 @@ public class CountdownView: UIView {
                                                                                action: #selector(countdownView.didTapBackgroundView)))
     }
     
+    if !countdownView.canCancel {
+        countdownView.cancelButton.isHidden = true
+    }
+    
     if countdownView.superview == nil {
       
       CountdownView.shared.setupViews()
@@ -256,6 +261,11 @@ public class CountdownView: UIView {
       if countdownView.dismissStyle == .byButton {
         countdownView.animate(countdownView.closeButton, animation: .fadeIn, options: (duration: 0.5, delay: 0), completion: nil)
       }
+
+      if countdownView.canCancel {
+        countdownView.animate(countdownView.cancelButton, animation: .fadeIn, options: (duration: 0.5, delay: 0), completion: nil)
+      }
+        
       countdownView.animate(countdownView.backgroundView, animation: .fadeIn, options: (duration: 0.5, delay: 0), completion: nil)
       countdownView.animate(countdownView.contentView, animation: animation, options: (duration: 0.5, delay: 0.2), completion: nil)
       
@@ -340,6 +350,12 @@ public class CountdownView: UIView {
         countdownView.animate(countdownView.closeButton, animation: animation,
                               options: (duration: options.duration, delay: options.delay), completion: nil)
       }
+        
+      if countdownView.canCancel {
+        countdownView.animate(countdownView.cancelButton, animation: animation,
+                              options: (duration: options.duration, delay: options.delay), completion: nil)
+      }
+        
       countdownView.animate(countdownView.contentView, animation: animation,
                             options: (duration: options.duration, delay: options.delay), completion: nil)
       countdownView.animate(countdownView.backgroundView, animation: .fadeOut,
